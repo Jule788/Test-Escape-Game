@@ -1,0 +1,75 @@
+
+const app=document.querySelector("#app"), prog=document.querySelector("#progress");
+let station=0;
+const setProgress=n=>{station=n;prog.textContent=`Station ${n} / 5`};
+const panel=(html)=>{app.innerHTML=`<section class="panel">${html}</section>`;window.scrollTo({top:0,behavior:"smooth"})};
+const msg=(text,good=false)=>`<div class="notice ${good?'good':'bad'}">${text}</div>`;
+function start(){
+ setProgress(0); panel(`<div class="eyebrow">Browser-Escape-Spiel</div><h1>Release 2.0</h1><h2>Release in Gefahr</h2>
+ <div class="story"><b>Freitag, 15:47 Uhr.</b><br><br>Um 17:00 Uhr soll Release 2.0 des Kundenportals eines Finanzinstituts produktiv gesetzt werden. Teile der Testdokumentation sind gesperrt. Informationen fehlen. Einige Entscheidungen müssen überprüft werden.<br><br><b>Analysiere die Informationen. Löse die Aufgaben. Nicht alles ist relevant.</b></div>
+ <button class="primary" onclick="s1a()">Testsystem öffnen</button>`);
+}
+function s1a(){
+ setProgress(1); panel(`<div class="eyebrow">Station 1</div><h2>Der gesperrte Zugang</h2>
+ <div class="req"><b>ANF-042</b><br>Nach drei aufeinanderfolgenden falschen Passworteingaben muss das Benutzerkonto für <b>15 Minuten</b> gesperrt werden.</div>
+ <div class="story">1. Falsches Passwort → Anmeldung abgelehnt<br>2. Falsches Passwort → Anmeldung abgelehnt<br>3. Falsches Passwort → „Benutzerkonto gesperrt“<br>4. Browser aktualisiert<br>5. Korrektes Passwort → <b>Anmeldung erfolgreich</b></div>
+ <h3>Welche Aussage beschreibt die Situation fachlich korrekt?</h3><div class="options">
+ ${["Die erfolgreiche Anmeldung ist eine Fehlhandlung des Testers.","Im Testobjekt befindet sich ein Fehlerzustand. Bei der Testdurchführung zeigt sich eine Fehlerwirkung.","Die Anforderung ist eine Fehlerwirkung.","Es liegt kein Problem vor, weil die Sperrmeldung angezeigt wurde."].map((x,i)=>`<button class="option" onclick="s1answer(${i})">${"ABCD"[i]}) ${x}</button>`).join("")}</div><div id="fb"></div>`);
+}
+function s1answer(i){document.querySelector("#fb").innerHTML=i===1?msg("✓ Fachlich korrekt. Wissen reicht nicht – jetzt musst du testen.",true)+`<button class="primary" onclick="s1b()">Weiter</button>`:msg("Noch nicht. Unterscheide Fehlhandlung, Fehlerzustand und Fehlerwirkung.");}
+let picks=new Set();
+function s1b(){
+ const ideas=["Schriftgröße der Fehlermeldung überprüfen","Prüfen, ob die Sperre nach Schließen und erneutem Öffnen des Browsers besteht","Profilbild ändern","Anmeldung nach 15 Minuten versuchen","Impressum auf Rechtschreibfehler untersuchen","Prüfen, ob die Sperre bei Anmeldung über eine zweite Sitzung besteht","Farbe der Schaltfläche „Anmelden“ überprüfen","Anmeldung nach 14 Minuten und 59 Sekunden versuchen"];
+ panel(`<div class="eyebrow">Station 1 · Testideen</div><h2>Wähle vier besonders relevante zusätzliche Tests</h2><div class="options">${ideas.map((x,i)=>`<button id="i${i+1}" class="option" onclick="pick(${i+1})">${i+1}. ${x}</button>`).join("")}</div><button onclick="checkPicks()">Auswahl prüfen</button><div id="fb"></div>`);picks.clear();
+}
+function pick(n){picks.has(n)?picks.delete(n):picks.add(n);document.querySelector("#i"+n).classList.toggle("selected")}
+function checkPicks(){let ok=[2,4,6,8].every(x=>picks.has(x))&&picks.size===4;document.querySelector("#fb").innerHTML=ok?msg("✓ Die relevanten Testideen sind 2, 4, 6 und 8.",true)+`<h3>Zahlenschloss</h3><p class="small">Hinweis: Grenzen sind besonders interessant.</p><input id="code1" class="code" maxlength="4" inputmode="numeric"><button onclick="code1()">Öffnen</button><div id="lock"></div>`:msg("Die Auswahl passt noch nicht zum beobachteten Sperrverhalten.");}
+function code1(){document.querySelector("#lock").innerHTML=document.querySelector("#code1").value==="1459"?msg("🔓 Code 1459 akzeptiert.",true)+`<button class="primary" onclick="s2()">Station 2</button>`:msg("Zugriff verweigert. Betrachte besonders den Zeitpunkt unmittelbar vor Ablauf der 15 Minuten.");}
+function s2(){
+ setProgress(2); panel(`<div class="eyebrow">Station 2</div><h2>Das Testprozess-Chaos</h2><div class="story">Die Zuordnung der Testaktivitäten wurde beschädigt. Welche Aktivität <b>begleitet</b> den Testprozess, statt nur als einzelner Schritt in einer linearen Kette betrachtet zu werden?</div>
+ <div class="options">${["Testplanung","Testüberwachung und Teststeuerung","Testentwurf","Testabschluss"].map((x,i)=>`<button class="option" onclick="s2a(${i})">${x}</button>`).join("")}</div><div id="fb"></div>`);
+}
+function s2a(i){document.querySelector("#fb").innerHTML=i===1?msg("✓ Testüberwachung und Teststeuerung begleiten den Testprozess.",true)+`<button class="primary" onclick="s2b()">Teststatus öffnen</button>`:msg("Diese Aktivität ist Teil des Prozesses, aber gesucht ist die begleitende Aktivität.");}
+function s2b(){panel(`<div class="eyebrow">Station 2 · Teststatus</div><h2>Überprüfe die Statusmeldung</h2>
+ <table><tr><th>Status</th><th>Anzahl</th></tr><tr><td>Geplante Testfälle</td><td>240</td></tr><tr><td>Erfolgreich durchgeführt</td><td>144</td></tr><tr><td>Fehlgeschlagen</td><td>36</td></tr><tr><td>Blockiert</td><td>12</td></tr><tr><td>Noch nicht durchgeführt</td><td>48</td></tr></table>
+ <div class="notice">Projektstatus: „80 % der geplanten Tests wurden bereits durchgeführt.“</div>
+ <p>Wie hoch ist der tatsächliche Durchführungsgrad? <input id="pct" type="number"> %</p><p>Wie viele der durchgeführten Testfälle waren nicht erfolgreich? <input id="fail" type="number"></p>
+ <button onclick="s2check()">Prüfen</button><div id="fb"></div>`)}
+function s2check(){let ok=+pct.value===75&&+fail.value===36;document.querySelector("#fb").innerHTML=ok?msg("✓ 180 von 240 wurden durchgeführt = 75 %. Davon sind 36 fehlgeschlagen.",true)+`<p>Verbinde die beiden Ergebnisse zum Zugangscode.</p><input id="code2" class="code" maxlength="4"><button onclick="code2()">Öffnen</button><div id="lock"></div>`:msg("Blockierte Testfälle zählen in dieser Aufgabe nicht als durchgeführt.");}
+function code2(){document.querySelector("#lock").innerHTML=document.querySelector("#code2").value==="7536"?msg("🔓 Code 7536 akzeptiert.",true)+`<button class="primary" onclick="s3()">Station 3</button>`:msg("Code nicht akzeptiert.");}
+function s3(){
+ setProgress(3); panel(`<div class="eyebrow">Station 3</div><h2>Das neue Überweisungslimit</h2>
+ <div class="req"><b>ANF-327</b><br>0–1.000 €: ohne zusätzliche Freigabe<br>&gt;1.000–10.000 €: zusätzliche Freigabe<br>&gt;10.000 €: nicht zulässig<br>Negative Werte: nicht zulässig<br>Nur volle Eurobeträge.</div>
+ <h3>Wie viele Äquivalenzklassen ergeben sich aus diesen Ergebnisbereichen?</h3>
+ <div class="options">${[3,4,5,6].map(n=>`<button onclick="s3a(${n})">${n}</button>`).join("")}</div><div id="fb"></div>`);
+}
+function s3a(n){document.querySelector("#fb").innerHTML=n===4?msg("✓ Vier Klassen: <0; 0–1.000; >1.000–10.000; >10.000.",true)+`<h3>Welche zusätzliche Testentwurfstechnik ist hier besonders naheliegend?</h3><button onclick="s3b(false)">Entscheidungstabellentest</button><button onclick="s3b(true)">Grenzwertanalyse</button><button onclick="s3b(false)">Zustandsübergangstest</button>`:msg("Prüfe, bei welchen Wertebereichen sich das erwartete Verhalten ändert.");}
+function s3b(ok){document.querySelector("#fb").innerHTML=ok?msg("✓ Grenzwertanalyse. Relevante Paare sind z. B. −1/0, 1.000/1.001 und 10.000/10.001.",true)+`<div class="placeholder"><b>Escape-Abschluss Station 3</b><br>PLATZHALTER – wird später gemeinsam entwickelt.</div><button class="primary" onclick="s4()">Vorläufig weiter zu Station 4</button>`:msg("Für Wertebereiche mit Verhaltenswechsel ist eine andere Technik besonders passend.");}
+function s4(){
+ setProgress(4); panel(`<div class="eyebrow">Station 4</div><h2>Die unvollständige Fehlermeldung</h2>
+ <div class="story"><b>FM-481 – Überweisungsvorlage kann nicht gespeichert werden</b><br><br>Vorgehen und erwartetes Ergebnis sind dokumentiert. Tatsächlich erscheint: „Die eingegebenen Daten konnten nicht verarbeitet werden.“<br><br><b>Rückmeldung:</b> Nicht nachvollziehbar. Welche Daten wurden eingegeben?</div>
+ <h3>Welche zwei zusätzlichen Informationen helfen hier besonders?</h3>
+ <div class="options"><button onclick="s4a(false)">Name des Testers + Anzahl aller Testfälle</button><button onclick="s4a(true)">Verwendete Eingabedaten + Bildschirmfoto</button><button onclick="s4a(false)">Bildschirmauflösung + Kontostand</button></div><div id="fb"></div>`);
+}
+function s4a(ok){document.querySelector("#fb").innerHTML=ok?msg("✓ Dokumentation gefunden.",true)+`<button class="primary" onclick="s4screen()">Bildschirmfoto öffnen</button>`:msg("Gesucht sind Informationen, mit denen das konkrete Verhalten nachvollzogen werden kann.");}
+function s4screen(){panel(`<div class="eyebrow">Station 4 · Beweisstück</div><h2>Bildschirmfoto</h2>
+ <div class="screen"><div class="bank">FINANZPORTAL · Neue Überweisungsvorlage</div><div class="field"><b>Empfänger</b><br>Müller &amp; Söhne GmbH</div><div class="field"><b>IBAN</b><br>DE12 3456 7890 1234 5678 00</div><div class="field"><b>Vorlagenname</b><br>Büromiete September</div><div class="error">Die eingegebenen Daten konnten nicht verarbeitet werden.</div><div class="stamp">Aufnahme: 19:27</div></div>
+ <div class="req">Der Empfängername darf Buchstaben, Ziffern, Leerzeichen sowie <b>. , - / &amp;</b> enthalten.</div>
+ <h3>Wie sollte der Fehler zunächst nachvollzogen werden?</h3><button onclick="s4b(true)">Mit den im Bildschirmfoto dokumentierten Eingabedaten</button><button onclick="s4b(false)">Mit beliebigen neuen Empfängerdaten</button><div id="fb"></div>`)}
+function s4b(ok){document.querySelector("#fb").innerHTML=ok?msg("✓ Richtig. Untersuche das Bildschirmfoto jetzt noch einmal genau.",true)+`<p>Der Zeitpunkt der Aufnahme öffnet den Zugang.</p><input id="code4" class="code" maxlength="4"><button onclick="code4()">Öffnen</button><div id="lock"></div>`:msg("Zunächst sollten die dokumentierten Bedingungen nachvollzogen werden.");}
+function code4(){document.querySelector("#lock").innerHTML=document.querySelector("#code4").value==="1927"?msg("🔓 Code 1927 akzeptiert.",true)+`<button class="primary" onclick="s5()">Station 5</button>`:msg("Code nicht akzeptiert. Sieh auf das Bildschirmfoto.");}
+function s5(){
+ setProgress(5); panel(`<div class="eyebrow">Station 5</div><h2>Die letzten 12 Stunden</h2><div class="story">Bis zum Testabschluss stehen nur noch <b>12 Teststunden</b> zur Verfügung. Setze die Zeit risikoorientiert ein.</div>
+ <h3>Welche zwei Faktoren bestimmen die Höhe eines Produktrisikos?</h3><div class="options"><button onclick="s5a(false)">Testfallanzahl + Entwicklungsdauer</button><button onclick="s5a(true)">Eintrittswahrscheinlichkeit + Schadensausmaß</button><button onclick="s5a(false)">Testeranzahl + Produktivsetzung</button></div><div id="fb"></div>`);
+}
+function s5a(ok){document.querySelector("#fb").innerHTML=ok?msg("✓ Risikobewertung freigeschaltet.",true)+`<button class="primary" onclick="s5hours()">12 Stunden verteilen</button>`:msg("Denke an Wahrscheinlichkeit und mögliche Auswirkung.");}
+function s5hours(){panel(`<div class="eyebrow">Station 5 · Planung</div><h2>Verteile 12 Teststunden</h2><p class="small">Der Prototyp akzeptiert mehrere Verteilungen. Bereiche mit hohem Risiko sollen mehr Zeit erhalten als Bereiche mit niedrigerem Risiko; kein Bereich soll ignoriert werden.</p>
+ <table><tr><th>Bereich</th><th>Risiko</th><th>Stunden</th></tr>
+ <tr><td>Überweisungen</td><td>hoch</td><td><input id="h1" type="number" min="0"></td></tr><tr><td>Persönliche Daten</td><td>hoch</td><td><input id="h2" type="number" min="0"></td></tr><tr><td>Umsatzsuche</td><td>mittel</td><td><input id="h3" type="number" min="0"></td></tr><tr><td>Elektronisches Postfach</td><td>niedriger</td><td><input id="h4" type="number" min="0"></td></tr><tr><td>Profilbild</td><td>niedriger</td><td><input id="h5" type="number" min="0"></td></tr></table>
+ <button onclick="s5check()">Plan prüfen</button><div id="fb"></div>`)}
+function s5check(){let a=[h1,h2,h3,h4,h5].map(x=>+x.value),sum=a.reduce((x,y)=>x+y,0),ok=sum===12&&a.every(x=>x>0)&&a[0]>a[3]&&a[0]>a[4]&&a[1]>a[3]&&a[1]>a[4];document.querySelector("#fb").innerHTML=ok?msg("✓ Risikoorientierte Verteilung akzeptiert.",true)+`<button class="primary" onclick="s5sick()">Plan speichern</button>`:msg(`Aktuell verteilt: ${sum} Stunden. Prüfe Gesamtzahl und Risikoorientierung.`);}
+function s5sick(){panel(`<div class="eyebrow">Station 5 · Unerwartete Änderung</div><h2>🔔 Neue Nachricht</h2><div class="story"><b>Betreff: Krankmeldung</b><br><br>Hallo zusammen,<br><br>mich hat es leider erwischt. Ich kann die heute geplanten Tests im Bereich <b>Überweisungen</b> nicht durchführen. Damit fallen meine vorgesehenen <b>4 Teststunden</b> aus.<br><br>Gute Besserung an mich selbst. 😉<br><br>– Thomas</div>
+ <h3>Wie reagierst du?</h3><div class="options"><button onclick="s5decision('A')">A) Vier Stunden ersatzlos streichen</button><button onclick="s5decision('B')">B) Prüfen, ob Testkapazität aus Bereichen mit niedrigerem Produktrisiko verlagert werden kann</button><button onclick="s5decision('C')">C) Projektleitung informieren und um geeigneten Ersatz bitten</button><button onclick="s5decision('D')">D) Produktivsetzung sofort absagen</button></div><div id="fb"></div>`)}
+function s5decision(x){let f=document.querySelector("#fb");if(x==="B")f.innerHTML=msg("✓ Sinnvolle Steuerungsmaßnahme. Eine Umverteilung muss auf Eignung und Auswirkungen geprüft werden.",true)+`<div class="notice">Da die Änderung Auswirkungen auf die Testplanung hat, wird anschließend die Projektleitung informiert.</div><button onclick="s5end()">Weiter</button>`;else if(x==="C")f.innerHTML=msg("✓ Sinnvolle Steuerungsmaßnahme. Die Projektleitung ist informiert.",true)+`<div class="notice">Antwort: Kurzfristig ist kein zusätzlicher Ersatz verfügbar. Prüft bitte eine risikoorientierte Umverteilung vorhandener Testkapazität.</div><button onclick="s5end()">Weiter</button>`;else f.innerHTML=msg("Diese Reaktion berücksichtigt die Auswirkungen des Ressourcenausfalls noch nicht angemessen. B und C sind als erste Schritte beide vertretbar.");}
+function s5end(){panel(`<div class="eyebrow">Station 5</div><h2>Teststeuerung durchgeführt</h2><div class="notice good">✓ Ressourcenengpass bewertet<br>✓ Auswirkungen auf die Testplanung berücksichtigt<br>✓ Projektleitung einbezogen<br>✓ Handlungsoptionen geprüft</div><div class="placeholder"><b>Escape-Rätsel Station 5</b><br>PLATZHALTER – wird später gemeinsam entwickelt.</div><h3>Ende des Prototyps v0.1</h3><p>Station 1 bis 5 sind damit als erster klickbarer Ablauf umgesetzt.</p><button onclick="start()">Prototyp neu starten</button>`)}
+start();
