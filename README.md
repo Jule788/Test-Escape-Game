@@ -1,22 +1,14 @@
-# Release 2.0 – Release in Gefahr · v1.1
+# Release 2.0 – Release in Gefahr · v1.2
 
-Korrigierte Browserfassung nach QS-Rückmeldung.
+Statisches Test-Escape-Spiel für GitHub Pages.
 
-## Dateien
-- `index.html`
-- `style.css`
-- `game.js`
+## Änderungen v1.2
+- QS-Rückmeldungen für Woche 1 eingearbeitet.
+- Ansprache so formuliert, dass Einzelpersonen und Gruppen gemeinsam angesprochen werden.
+- Station 1: Titel, Statusanzeigen und Abschluss angepasst; Testteam aus dem Abschlusskasten entfernt; eigene Übergangsseite ergänzt.
+- Station 2: Fokus auf Klärung des Testprozesses; Testumgebungsausfall aus dieser Station entfernt; eigene Übergangsseite ergänzt.
+- Station 3: Terminologie auf Testfallanalyse/-erstellung angepasst; ANF-327 bleibt sichtbar; Grenzwertübergänge und Testfallerstellung überarbeitet; Wochenwechsel auf eigene Seite gelegt.
+- Korrekte Auswahl bei der Grenzwertaufgabe bleibt sichtbar hervorgehoben.
 
-## Änderungen gegenüber v1.0
-- Einstieg auf Montag 08:12 Uhr und Zwei-Wochen-Szenario korrigiert.
-- „Test-Escape-Spiel“ und Button „Release retten“.
-- Systemstart vor Station 1 ergänzt.
-- Richtige Reihenfolge aller sieben Stationen wiederhergestellt.
-- Station 1 beginnt mit dem beschädigten Testkonzept.
-- Fortschrittsanzeigen 43 → 57 → 71 → 86 → 100 % in Station 1.
-- Woche 1 / Woche 2 und Übergänge gemäß Master-Konzept.
-- Codes 1459 und 1927 an den vorgesehenen Stellen.
-- FM-481 mit Umlauten ü/ö als auffälliger Eingabe und Kontrollversuch.
-- TF-327-04 wird in Station 6/7 wieder aufgegriffen, nicht in Station 5.
-- Henrys Ausfall und risikoorientierte Teststeuerung in Station 6.
-- Vollständiger Testabschluss in Station 7 ohne GO/NO-GO-Entscheidung durch den Spieler.
+## Veröffentlichung
+Die Dateien `index.html`, `style.css` und `game.js` in das Stammverzeichnis des GitHub-Pages-Repositories kopieren. Danach committen/pushen.
