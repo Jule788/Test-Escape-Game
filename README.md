@@ -6,3 +6,11 @@ Korrekturversion nach QS:
 - Cache-Busting für CSS/JavaScript, damit GitHub Pages nach dem Upload nicht versehentlich alte Dateien aus dem Browser-Cache verwendet.
 
 Für GitHub Pages alle Dateien aus diesem Ordner in das Repository-Root kopieren/ersetzen.
+
+
+## v1.5
+- Erfolgsmeldung bei der Testumgebung lautet „DATEN WURDEN KORRIGIERT“.
+- SSL-Maßnahmen sind gemischt angeordnet.
+- Ungeeignete ausgewählte SSL-Maßnahmen werden im Feedback gezielt hinterfragt.
+- Teilweise sinnvolle SSL-Auswahlen erhalten neutrales Feedback und passende Credits.
+- Cache-Version auf 1.5 erhöht.
