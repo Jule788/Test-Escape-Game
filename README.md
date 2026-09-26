@@ -1,14 +1,15 @@
-# Release 2.0 – Release in Gefahr · v1.2
+# Release 2.0 – Release in Gefahr · v1.3
 
 Statisches Test-Escape-Spiel für GitHub Pages.
 
-## Änderungen v1.2
-- QS-Rückmeldungen für Woche 1 eingearbeitet.
-- Ansprache so formuliert, dass Einzelpersonen und Gruppen gemeinsam angesprochen werden.
-- Station 1: Titel, Statusanzeigen und Abschluss angepasst; Testteam aus dem Abschlusskasten entfernt; eigene Übergangsseite ergänzt.
-- Station 2: Fokus auf Klärung des Testprozesses; Testumgebungsausfall aus dieser Station entfernt; eigene Übergangsseite ergänzt.
-- Station 3: Terminologie auf Testfallanalyse/-erstellung angepasst; ANF-327 bleibt sichtbar; Grenzwertübergänge und Testfallerstellung überarbeitet; Wochenwechsel auf eigene Seite gelegt.
-- Korrekte Auswahl bei der Grenzwertaufgabe bleibt sichtbar hervorgehoben.
+## Änderungen v1.3
+- QS-Rückmeldungen Woche 1 V0.2 umgesetzt.
+- Station 1: Rückmeldungen bei Testumgebung sowie Testüberwachung/-steuerung auf „Daten wurden korrigiert“ vereinheitlicht.
+- Station 2: Testaktivitäten bewusst gemischt; neutrale Testprozess-Formulierungen beibehalten.
+- Station 3: Repräsentanten nicht mehr vorbelegt; jedes Dropdown enthält dieselbe vollständige Werteliste.
+- Neue Zwischenszene zum abgelaufenen SSL-Zertifikat vor Beginn der Testdurchführung in Woche 2.
+- Credit-System ergänzt: maximal 100 Credits; Entscheidungen in der SSL-Szene werden abgestuft bewertet; normale Fehlversuche ziehen keine Credits ab.
+- Neutrale Formulierungen für Einzelpersonen und Gruppen beibehalten.
 
 ## Veröffentlichung
-Die Dateien `index.html`, `style.css` und `game.js` in das Stammverzeichnis des GitHub-Pages-Repositories kopieren. Danach committen/pushen.
+`index.html`, `style.css` und `game.js` in das Stammverzeichnis des GitHub-Pages-Repositories kopieren und committen/pushen.
