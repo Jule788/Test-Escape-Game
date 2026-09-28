@@ -1,6 +1,5 @@
-# Release 2.0 – Woche 1 · QS-Version
+# Release 2.0 – Test-Rescue-Game – Woche 1 QS v1.7
 
-Enthält nur den spielbaren Ablauf von Woche 1 (Station 1–3).
-Die Version endet nach „Bereit für die Testdurchführung“ und startet Woche 2 nicht.
+Getrennte QS-Version für Woche 1 (Station 1–3).
 
-Für die QS `index.html` öffnen oder die vier Dateien separat auf GitHub Pages bereitstellen.
+Enthält die Änderungen aus QS_Woche_1_V1.0: flexible Testziel-Credits, überarbeitete Testumgebung, Freitext für Testüberwachung/Teststeuerung, Mittwoch-Donnerstag-Zeitsprung und aktualisierten Wochenabschluss.
