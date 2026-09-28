@@ -1,13 +1,6 @@
-# Release 2.0 – Test-Escape-Spiel v1.6
+# Release 2.0 – Woche 1 · QS-Version
 
-Überarbeitete Woche 2 nach QS_Woche 2_V0.1.
+Enthält nur den spielbaren Ablauf von Woche 1 (Station 1–3).
+Die Version endet nach „Bereit für die Testdurchführung“ und startet Woche 2 nicht.
 
-Enthalten sind unter anderem:
-- durchgängige Anzeige von Wochentag und Uhrzeit in Woche 2
-- überarbeitete Station 4 (Login/Kontosperre, weitere Testfälle, Archivcode 1459)
-- überarbeitete Fehlermeldung FM-481 mit Screenshot-Uhrzeit und Code 1727
-- erweiterte Risikobewertung und Replanung in Station 6
-- E-Mail-Szene zum Ressourcenausfall mit Credit-Abstufung
-- überarbeiteter Testabschluss und Release-Finale
-
-GitHub Pages: alle Dateien im Repository ersetzen.
+Für die QS `index.html` öffnen oder die vier Dateien separat auf GitHub Pages bereitstellen.
