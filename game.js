@@ -1,7 +1,7 @@
 const app=document.querySelector('#app'), prog=document.querySelector('#progress'), creditEl=document.querySelector('#credits');
 let credits=0; const awarded=new Set(); let currentClock='';
 function setClock(t){currentClock=t;}
-function updateCredits(){if(creditEl) creditEl.textContent=`CREDITS ${credits} / 100`;}
+function updateCredits(){}
 function award(key,n){if(!awarded.has(key)){awarded.add(key);credits=Math.min(100,credits+n);updateCredits();return `<div class=\"creditpop\">+${n} CREDITS</div>`}return '';}
 function resetCredits(){credits=0;awarded.clear();updateCredits();}
 const panel=html=>{app.innerHTML=`<section class="panel">${html}</section>`;scrollTo({top:0,behavior:'smooth'})};
@@ -98,10 +98,38 @@ function rec(ok){document.querySelector('#fb').innerHTML=ok?msg('✓ EMPFEHLUNG 
 function finish(){setClock('Woche 2 · Freitag 15:58 Uhr');award('s7',20);panel(`<div class="eyebrow">Woche 2 · Freitag 15:58 Uhr</div><h1>Release 2.0</h1><h2>Testphase abgeschlossen</h2><div class="story mono">testabschluss_release20.pdf wird erzeugt …<br>Ergebnisse und verbleibende Risiken dokumentiert ✓<br>Freigabeempfehlung übermittelt ✓<br><span class="goodtext">✓ ERFOLGREICH</span></div><div class="notice"><b>ENTSCHEIDUNG ÜBER PRODUKTIVSETZUNG</b><br><br>Um die Entscheidung, ob das Release gerettet werden konnte, einsehen zu können, gibt es noch zwei letzte Rätsel zu lösen.</div><button class="primary" onclick="finalCodes()">Rätsel lösen</button>`)}
 function finalCodes(){panel(`<div class="eyebrow">Abschlussrätsel · 1 von 2</div><h2>Fundcodes eingeben</h2><p>Die drei während des Spiels gefundenen Codes eingeben.</p><div class="grid3"><div class="bucket"><input id="fc1" class="code" maxlength="4" inputmode="numeric" placeholder="____"></div><div class="bucket"><input id="fc2" class="code" maxlength="4" inputmode="numeric" placeholder="____"></div><div class="bucket"><input id="fc3" class="code" maxlength="4" inputmode="numeric" placeholder="____"></div></div><br><button onclick="checkFinalCodes()">Codes prüfen</button><div id="fb"></div>`)}
 function checkFinalCodes(){let ok=fc1.value==='1459'&&fc2.value==='1727'&&fc3.value==='8306';document.querySelector('#fb').innerHTML=ok?msg('✓ Die Kombination stimmt.',true)+`<button class="primary" onclick="phoneRiddle()">Letztes Rätsel</button>`:msg('Die Kombination stimmt noch nicht.')}
-let hintLevel=0;
-function phoneRiddle(){hintLevel=0;panel(`<div class="eyebrow">Abschlussrätsel · 2 von 2</div><div class="story">Gesucht wird das, worum sich in den vergangenen zwei Wochen alles gedreht hat.</div><div class="oldphone"><div class="phonescreen">16:00</div><div class="phonekeys"><div>1</div><div><b>2</b><small>ABC</small></div><div><b>3</b><small>DEF</small></div><div><b>4</b><small>GHI</small></div><div><b>5</b><small>JKL</small></div><div><b>6</b><small>MNO</small></div><div><b>7</b><small>PQRS</small></div><div><b>8</b><small>TUV</small></div><div><b>9</b><small>WXYZ</small></div><div>*</div><div><b>0</b></div><div>#</div></div></div><div class="riddleactions"><input id="finalCode" class="code" maxlength="4" inputmode="numeric" placeholder="____"><button onclick="checkPhoneRiddle()">Code prüfen</button><button id="hintBtn" onclick="showHint()">Tipp</button></div><div id="hintbox"></div><div id="fb"></div>`)}
+let hintLevel=0, phoneCode='';
+function phoneRiddle(){
+ hintLevel=0;phoneCode='';
+ panel(`<div class="eyebrow">Abschlussrätsel · 2 von 2</div>
+ <div class="story">Gesucht wird ein Code, der gleichzeitig ein Wort ergibt. Hierum ging es die letzten beiden Wochen.</div>
+ <div class="oldphone">
+   <div class="speaker"></div>
+   <div class="phonescreen"><span>16:00</span><small id="phoneEntry">_ _ _ _</small></div>
+   <div class="phonebrand">MOBILE</div>
+   <div class="phonecontrols"><button class="callkey green" aria-label="Anrufen">☎</button><button class="navkey" aria-label="Navigation">●</button><button class="callkey red" aria-label="Auflegen">☎</button></div>
+   <div class="phonekeys">
+    <button onclick="phonePress('1')"><b>1</b><small>&nbsp;</small></button>
+    <button onclick="phonePress('2')"><b>2</b><small>ABC</small></button>
+    <button onclick="phonePress('3')"><b>3</b><small>DEF</small></button>
+    <button onclick="phonePress('4')"><b>4</b><small>GHI</small></button>
+    <button onclick="phonePress('5')"><b>5</b><small>JKL</small></button>
+    <button onclick="phonePress('6')"><b>6</b><small>MNO</small></button>
+    <button onclick="phonePress('7')"><b>7</b><small>PQRS</small></button>
+    <button onclick="phonePress('8')"><b>8</b><small>TUV</small></button>
+    <button onclick="phonePress('9')"><b>9</b><small>WXYZ</small></button>
+    <button onclick="phoneClear()"><b>⌫</b><small>LÖSCHEN</small></button>
+    <button onclick="phonePress('0')"><b>0</b><small>+</small></button>
+    <button onclick="checkPhoneRiddle()"><b>✓</b><small>PRÜFEN</small></button>
+   </div>
+ </div>
+ <div class="riddleactions"><button id="hintBtn" onclick="showHint()">Tipp</button></div><div id="hintbox"></div><div id="fb"></div>`)
+}
+function renderPhoneCode(){const el=document.querySelector('#phoneEntry');if(el)el.textContent=(phoneCode+'____').slice(0,4).split('').join(' ')}
+function phonePress(n){if(phoneCode.length<4){phoneCode+=n;renderPhoneCode();document.querySelector('#fb').innerHTML=''}}
+function phoneClear(){phoneCode=phoneCode.slice(0,-1);renderPhoneCode();document.querySelector('#fb').innerHTML=''}
 function showHint(){hintLevel=Math.min(3,hintLevel+1);const hints=[`8306, 1459 und 1727 – die Zahlen, die gesucht werden, befinden sich in zwei der drei Codes.`,`Es sind 8306 und 1727 – und eine Zahl ist doppelt.`,`Der Lösungscode bzw. das Lösungswort beginnt mit den ersten beiden Zahlen analog einer der beiden Codes.`];document.querySelector('#hintbox').innerHTML=msg(`<b>Tipp ${hintLevel} von 3</b><br>${hints[hintLevel-1]}`,true);document.querySelector('#hintBtn').textContent=hintLevel<3?'Nächster Tipp':'Tipp 3 / 3';if(hintLevel===3)document.querySelector('#hintBtn').disabled=true}
-function checkPhoneRiddle(){if(finalCode.value==='8378'){releaseDecision()}else{document.querySelector('#fb').innerHTML=msg('Der Code stimmt noch nicht.')}}
+function checkPhoneRiddle(){if(phoneCode==='8378'){releaseDecision()}else{document.querySelector('#fb').innerHTML=msg('Der Code stimmt noch nicht.')}}
 function releaseDecision(){panel(`<div class="eyebrow">Release-Entscheidung</div><div class="notice good"><b>ENTSCHEIDUNG DER RELEASE-VERANTWORTLICHEN</b><br><br>Die Freigabeempfehlungen wurden eingeholt und unter Berücksichtigung der dokumentierten Einschränkungen bewertet.</div><div class="bigstatus center">RELEASE STATUS<br>RELEASE 2.0 FREIGEGEBEN<br><small>Produktivsetzung erfolgt · Gesammelte Credits: ${credits} / 100</small></div><div class="story center"><b>GESCHAFFT!</b><br>Release 2.0 ist gerettet.<br>Danke für die Unterstützung!</div><br><button onclick="startWeek2QS()">Spiel neu starten</button>`)}
 
 
