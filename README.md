@@ -1,4 +1,4 @@
-# Test-Rescue-Game – Woche 1 – QS v2.0
+# Test-Rescue-Game – Woche 1 – QS v2.1
 
 QS-Fassung von Woche 1 mit den Anpassungen aus QS_Woche_1_V1.4.
 
@@ -11,3 +11,7 @@ QS-Fassung von Woche 1 mit den Anpassungen aus QS_Woche_1_V1.4.
 - Update und Abschluss wurden an die neue Logik angepasst.
 
 Station 1 und Station 3 bleiben inhaltlich unverändert.
+
+
+## Änderung V2.1
+Station 2: drei Pflichtpunkte, zwei optionale Zusatzpunkte mit Credits, dynamische Maßnahmenblöcke und drei plausiblere Antwortoptionen je ausgewähltem Punkt.

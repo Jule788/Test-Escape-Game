@@ -45,73 +45,89 @@ function s1end(){let pct=goalsComplete?100:99;panel(`<div class="eyebrow">Statio
 function s1transition(){panel(`<div class="eyebrow">Woche 1 – 17:58 Uhr</div><h2>Geschafft – das Testkonzept steht!</h2><div class="story">Doch damit ist Release 2.0 noch lange nicht gerettet. Weitere Herausforderungen warten bereits.<br><br><b>Bereit, weiterzumachen?</b></div><button class="primary" onclick="s2()">Dienstag öffnen</button>`)}
 function s2(){setP(2,'Woche 1 · Dienstag');panel(`<div class="eyebrow">Station 2 · Dienstag 08:47 Uhr</div><h2>Sind wir bereit für Woche 2?</h2><div class="story"><b>VORBEREITUNG DER TESTDURCHFÜHRUNG</b><br><br>Das Testkonzept für Release 2.0 steht. Die Testdurchführung soll in der kommenden Woche beginnen. Vorher muss geprüft werden, ob die notwendigen Voraussetzungen dafür geschaffen sind.<br><br>Im Projekt wurden verschiedene Statusmeldungen gesammelt. Doch nicht alles ist bereits geklärt.</div><p><b>Welche Punkte müssen noch bearbeitet oder geklärt werden?</b></p><button class="primary" onclick="s2status()">Vorbereitung prüfen</button>`) }
 let prepPicks=new Set();
-// Station 2: Alle offenen Punkte sollen erkannt werden. "must" = vor Woche 2 zu klären,
-// "later" = Handlungsbedarf vorhanden, kann im Szenario für die betroffenen Tests in Woche 2 weiterverfolgt werden.
+// Station 2: Drei Pflichtpunkte müssen erkannt werden. Zwei zusätzliche offene Punkte sind optional.
+// Werden optionale Punkte erkannt, bringen sie Zusatzcredits und erhalten auf der Folgeseite ebenfalls einen Maßnahmenblock.
 const prepItems=[
  {text:'Testzeitraum für Woche 2 ist abgestimmt.',state:'ok'},
- {text:'Für einen wichtigen Geschäftsfall fehlen benötigte Testdaten. Davon ist nur ein Teil der geplanten Tests betroffen.',state:'later'},
+ {text:'Für einen wichtigen Geschäftsfall fehlen benötigte Testdaten. Davon ist nur ein Teil der geplanten Tests betroffen.',state:'optional'},
  {text:'Release 2.0 wurde auf der Zentralen Testumgebung noch nicht bestätigt.',state:'must'},
  {text:'Testwerkzeug steht für Woche 2 zur Verfügung.',state:'ok'},
  {text:'Eine für Release 2.0 vorgesehene Änderung ist fachlich noch nicht eindeutig beschrieben. Umfang und erforderliche Umsetzung sind noch ungeklärt.',state:'must'},
- {text:'Eine benötigte Schnittstelle steht noch nicht zur Verfügung. Davon sind nur wenige geplante Testfälle betroffen.',state:'later'},
+ {text:'Eine benötigte Schnittstelle steht noch nicht zur Verfügung. Davon sind nur wenige geplante Testfälle betroffen.',state:'optional'},
  {text:'Die Verfügbarkeit eines für Woche 2 benötigten Testers ist noch nicht bestätigt.',state:'must'},
  {text:'Die übrigen Anforderungen für Release 2.0 liegen in abgestimmter Form vor.',state:'ok'},
  {text:'Die für Woche 2 bereits bestätigten Tester haben Zugriff auf das Testwerkzeug.',state:'ok'},
  {text:'Die Ansprechpartner für fachliche Rückfragen in Woche 2 sind benannt.',state:'ok'}
 ];
-function s2status(){prepPicks.clear();panel(`<div class="eyebrow">Station 2 – Testvorbereitung</div><h2>Voraussetzungen prüfen</h2><div class="notice">Die Vorbereitungen für die Testdurchführung laufen. Einige Voraussetzungen sind bereits erfüllt, bei anderen besteht noch Handlungsbedarf.<br><br><b>Welche Punkte müssen noch bearbeitet oder geklärt werden?</b><br><br>Mehrere Statusmeldungen können ausgewählt werden. Dabei spielt zunächst keine Rolle, ob die Klärung noch in Woche 1 erfolgen muss oder während der Testdurchführung in Woche 2 erfolgen kann.</div><div class="prepgrid">${prepItems.map((x,i)=>`<button id="prep${i}" class="prepitem" onclick="togglePrep(${i})">${x.text}</button>`).join('')}</div><button onclick="checkPrep()">Auswahl prüfen</button><div id="fb"></div>`) }
+let selectedActionIndices=[];
+function s2status(){prepPicks.clear();selectedActionIndices=[];panel(`<div class="eyebrow">Station 2 – Testvorbereitung</div><h2>Voraussetzungen prüfen</h2><div class="notice">Die Vorbereitungen für die Testdurchführung laufen. Einige Voraussetzungen sind bereits erfüllt, bei anderen besteht noch Handlungsbedarf.<br><br><b>Welche Punkte müssen noch bearbeitet oder geklärt werden?</b><br><br>Mehrere Statusmeldungen können ausgewählt werden. Einige Punkte sind für den geplanten Start der Testdurchführung besonders wichtig. Andere betreffen nur einzelne Tests, können aber ebenfalls berücksichtigt werden.</div><div class="prepgrid">${prepItems.map((x,i)=>`<button id="prep${i}" class="prepitem" onclick="togglePrep(${i})">${x.text}</button>`).join('')}</div><button onclick="checkPrep()">Auswahl prüfen</button><div id="fb"></div>`) }
 function togglePrep(i){let k='prep'+i;prepPicks.has(i)?prepPicks.delete(i):prepPicks.add(i);document.querySelector('#'+k).classList.toggle('selected')}
 function checkPrep(){
  const selected=[...prepPicks];
  const selectedOk=selected.filter(i=>prepItems[i].state==='ok');
- const required=prepItems.map((x,i)=>x.state!=='ok'?i:null).filter(i=>i!==null);
- const missing=required.filter(i=>!prepPicks.has(i));
+ const must=prepItems.map((x,i)=>x.state==='must'?i:null).filter(i=>i!==null);
+ const missingMust=must.filter(i=>!prepPicks.has(i));
+ const optional=prepItems.map((x,i)=>x.state==='optional'?i:null).filter(i=>i!==null);
+ const selectedOptional=optional.filter(i=>prepPicks.has(i));
  if(!prepPicks.size){document.querySelector('#fb').innerHTML=msg('Mindestens einen Punkt auswählen.');return;}
  if(selectedOk.length){document.querySelector('#fb').innerHTML=msg('Mindestens ein ausgewählter Punkt ist bereits geklärt und stellt aktuell keinen Handlungsbedarf dar. Bitte die Auswahl prüfen.');return;}
- if(missing.length){document.querySelector('#fb').innerHTML=msg('Es gibt noch mindestens einen weiteren Punkt mit Handlungsbedarf. Dabei können auch Voraussetzungen betroffen sein, die nur einen Teil der Tests betreffen.');return;}
- document.querySelector('#fb').innerHTML=msg('Korrekt. Die noch zu bearbeitenden oder zu klärenden Voraussetzungen wurden erkannt.',true)+award('s2prep',4)+`<button class="primary" onclick="s2actions()">Maßnahmen ableiten</button>`;
+ if(missingMust.length){document.querySelector('#fb').innerHTML=msg('Mindestens eine wichtige Voraussetzung, die vor dem geplanten Testbeginn geklärt werden muss, wurde noch nicht berücksichtigt.');return;}
+ selectedActionIndices=[4,2,6];
+ if(prepPicks.has(1)) selectedActionIndices.push(1);
+ if(prepPicks.has(5)) selectedActionIndices.push(5);
+ let bonus='';
+ if(!awarded.has('s2prep')){awarded.add('s2prep');credits+=3;updateCredits();bonus+=`<div class="creditpop">+3 CREDITS</div>`;}
+ selectedOptional.forEach(i=>{const key='s2optional'+i;if(!awarded.has(key)){awarded.add(key);credits+=1;updateCredits();bonus+=`<div class="creditpop">+1 CREDIT · zusätzlicher Handlungsbedarf erkannt</div>`;}});
+ const extra=selectedOptional.length===2?'Zusätzlich wurden beide weiteren Handlungsbedarfe erkannt.':selectedOptional.length===1?'Zusätzlich wurde ein weiterer Handlungsbedarf erkannt.':'Die drei für den geplanten Testbeginn wichtigen Punkte wurden erkannt. Weitere Auffälligkeiten hätten zusätzliche Credits ermöglicht.';
+ document.querySelector('#fb').innerHTML=msg(`Korrekt. Die drei wichtigen Voraussetzungen wurden erkannt. ${extra}`,true)+bonus+`<button class="primary" onclick="s2actions()">Maßnahmen ableiten</button>`;
  document.querySelectorAll('.prepitem').forEach(b=>b.disabled=true);
 }
-const actionSets=[
- {title:'Änderung fachlich noch nicht eindeutig beschrieben',correct:0,opts:[
-  'Fachliche Klärung mit den zuständigen Ansprechpartnern veranlassen und Auswirkungen auf Umfang und Umsetzung prüfen.',
-  'Die Änderung ungeklärt lassen und die zugehörigen Tests vorsorglich als erfolgreich einplanen.',
-  'Nur die bereits vorhandenen Testfälle unverändert übernehmen.'
+const actionSets={
+ 4:{title:'Änderung fachlich noch nicht eindeutig beschrieben',correct:1,opts:[
+  'Die vorhandene Beschreibung zunächst als Arbeitsgrundlage verwenden, die Testanalyse fortsetzen und offene fachliche Punkte erst bei der Testdurchführung klären.',
+  'Fachliche Klärung mit den zuständigen Ansprechpartnern veranlassen, Auswirkungen auf Umfang und Umsetzung bewerten und die Testplanung bei Bedarf anpassen.',
+  'Die Änderung vorläufig aus dem Testumfang nehmen und erst nach Abschluss der übrigen Tests entscheiden, ob sie für Release 2.0 noch berücksichtigt wird.'
  ]},
- {title:'Release 2.0 auf der Zentralen Testumgebung noch nicht bestätigt',correct:1,opts:[
-  'Die Testdurchführung unabhängig vom installierten Stand beginnen.',
-  'Status der Releasekonfiguration auf der Zentralen Testumgebung klären und die Bereitstellung vor Testbeginn bestätigen lassen.',
-  'Die Bestätigung erst nach Abschluss der Testdurchführung einholen.'
+ 2:{title:'Release 2.0 auf der Zentralen Testumgebung noch nicht bestätigt',correct:0,opts:[
+  'Status der vorgesehenen Releasekonfiguration klären, die Bereitstellung bis zum Testbeginn verfolgen und die erfolgreiche Installation bestätigen lassen.',
+  'Die Testdurchführung wie geplant vorbereiten und am ersten Testtag anhand der verfügbaren Funktionen feststellen, welcher Stand tatsächlich installiert ist.',
+  'Die bereits bestätigten Teile der Testumgebung als ausreichend bewerten und nur bei auftretenden Abweichungen den installierten Releasestand nachträglich prüfen.'
  ]},
- {title:'Verfügbarkeit eines benötigten Testers noch nicht bestätigt',correct:2,opts:[
-  'Bis zum ersten Testtag warten und dann prüfen, ob jemand verfügbar ist.',
-  'Die geplanten Tests ohne Prüfung der verfügbaren Kapazität unverändert lassen.',
-  'Verfügbarkeit verbindlich klären und bei Bedarf die Ressourcenplanung anpassen.'
+ 6:{title:'Verfügbarkeit eines benötigten Testers noch nicht bestätigt',correct:1,opts:[
+  'Die bisherige Aufgabenverteilung beibehalten und die Verfügbarkeit unmittelbar vor Beginn der Testdurchführung erneut prüfen.',
+  'Verfügbarkeit verbindlich klären und prüfen, ob bei fehlender Kapazität die Ressourcen- oder Testplanung angepasst werden muss.',
+  'Die vorgesehenen Tests vorsorglich auf die bereits bestätigten Tester verteilen und die ursprüngliche Ressourcenplanung nur anpassen, falls später tatsächlich Kapazität fehlt.'
  ]},
- {title:'Testdaten für einen wichtigen Geschäftsfall fehlen',correct:0,opts:[
-  'Betroffene Tests identifizieren, Bereitstellung der benötigten Testdaten veranlassen und den Status weiterverfolgen.',
-  'Alle Tests für Woche 2 absagen, bis die Testdaten für diesen Geschäftsfall vorliegen.',
-  'Die betroffenen Tests ohne geeignete Testdaten als durchgeführt dokumentieren.'
+ 1:{title:'Testdaten für einen wichtigen Geschäftsfall fehlen',correct:1,opts:[
+  'Die betroffenen Tests zunächst zurückstellen und erst im Verlauf von Woche 2 prüfen, ob die benötigten Testdaten inzwischen bereitstehen.',
+  'Betroffene Tests identifizieren, Bereitstellung der benötigten Testdaten veranlassen, den Status weiterverfolgen und andere durchführbare Tests wie geplant vorbereiten.',
+  'Die Bereitstellung der Testdaten vor Beginn der gesamten Testdurchführung abwarten, damit alle vorgesehenen Tests in der ursprünglich geplanten Reihenfolge durchgeführt werden können.'
  ]},
- {title:'Benötigte Schnittstelle steht noch nicht zur Verfügung',correct:1,opts:[
-  'Die fehlende Schnittstelle ignorieren und die betroffenen Testfälle als erfolgreich bewerten.',
-  'Betroffene Testfälle identifizieren, Verfügbarkeit der Schnittstelle weiterverfolgen und zunächst andere durchführbare Tests einplanen.',
-  'Die gesamte Testdurchführung verschieben, obwohl nur wenige Testfälle betroffen sind.'
+ 5:{title:'Benötigte Schnittstelle steht noch nicht zur Verfügung',correct:1,opts:[
+  'Die betroffenen Testfälle in der ursprünglichen Reihenfolge belassen und erst bei Erreichen dieser Tests entscheiden, ob eine Umplanung notwendig ist.',
+  'Betroffene Testfälle identifizieren, Verfügbarkeit der Schnittstelle weiterverfolgen und zunächst unabhängig davon durchführbare Tests einplanen.',
+  'Die betroffenen Testfälle bis zur Bereitstellung der Schnittstelle aus der aktuellen Planung herausnehmen und erst nach deren Verfügbarkeit wieder in den Testumfang aufnehmen.'
  ]}
-];
+};
 let actionPicks={};
-function s2actions(){actionPicks={};panel(`<div class="eyebrow">Station 2 – Testvorbereitung</div><h2>Maßnahmen festlegen</h2><div class="story">Für jeden erkannten Handlungsbedarf ist eine passende Maßnahme auszuwählen. Nicht jeder offene Punkt muss bereits vor Woche 2 vollständig erledigt sein – entscheidend ist ein angemessener Umgang mit der jeweiligen Voraussetzung.</div><div class="actiongrid">${actionSets.map((a,i)=>`<div class="req"><b>${a.title}</b><div class="measuretiles" id="measure${i}">${a.opts.map((o,j)=>`<button onclick="pickAction(${i},${j})" id="measure${i}_${j}">${o}</button>`).join('')}</div></div>`).join('')}</div><button onclick="checkActions()">Maßnahmen prüfen</button><div id="fb"></div>`) }
+function s2actions(){actionPicks={};const sets=selectedActionIndices.map(i=>({itemIndex:i,...actionSets[i]}));panel(`<div class="eyebrow">Station 2 – Testvorbereitung</div><h2>Maßnahmen festlegen</h2><div class="story">Für jeden ausgewählten Handlungsbedarf ist eine passende Maßnahme festzulegen. Nicht jeder offene Punkt muss bereits vor Woche 2 vollständig erledigt sein. Entscheidend ist ein angemessener Umgang mit der jeweiligen Voraussetzung.</div><div class="actiongrid">${sets.map(a=>`<div class="req"><b>${a.title}</b><div class="measuretiles" id="measure${a.itemIndex}">${a.opts.map((o,j)=>`<button onclick="pickAction(${a.itemIndex},${j})" id="measure${a.itemIndex}_${j}">${o}</button>`).join('')}</div></div>`).join('')}</div><button onclick="checkActions()">Maßnahmen prüfen</button><div id="fb"></div>`) }
 function pickAction(group,opt){actionPicks[group]=opt;document.querySelectorAll(`#measure${group} button`).forEach(b=>b.classList.remove('selected'));document.querySelector(`#measure${group}_${opt}`).classList.add('selected')}
 function checkActions(){
- if(actionSets.some((a,i)=>actionPicks[i]===undefined)){document.querySelector('#fb').innerHTML=msg('Für jeden Handlungsbedarf eine Maßnahme auswählen.');return;}
- const wrong=actionSets.filter((a,i)=>actionPicks[i]!==a.correct).length;
- if(wrong){document.querySelector('#fb').innerHTML=msg('Mindestens eine Maßnahme passt noch nicht zum jeweiligen Handlungsbedarf. Bitte die markierten Entscheidungen noch einmal prüfen.');return;}
+ if(selectedActionIndices.some(i=>actionPicks[i]===undefined)){document.querySelector('#fb').innerHTML=msg('Für jeden angezeigten Handlungsbedarf eine Maßnahme auswählen.');return;}
+ const wrong=selectedActionIndices.filter(i=>actionPicks[i]!==actionSets[i].correct).length;
+ if(wrong){document.querySelector('#fb').innerHTML=msg('Mindestens eine Maßnahme ist noch nicht die angemessenste Reaktion auf den jeweiligen Handlungsbedarf. Die Entscheidungen können noch einmal geprüft und geändert werden.');return;}
  document.querySelectorAll('.measuretiles button').forEach(b=>b.disabled=true);
- document.querySelector('#fb').innerHTML=msg('Passende Maßnahmen wurden für alle offenen Voraussetzungen festgelegt.',true)+award('s2actions',6)+`<button class="primary" onclick="s2update()">weiter</button>`;
+ const n=selectedActionIndices.length;
+ document.querySelector('#fb').innerHTML=msg(`Passende Maßnahmen wurden für alle ${n} ausgewählten Handlungsbedarfe festgelegt.`,true)+award('s2actions',6)+`<button class="primary" onclick="s2update()">weiter</button>`;
 }
-function s2update(){panel(`<div class="eyebrow">Station 2 · Dienstag 16:36 Uhr</div><h2>Update zur Testvorbereitung</h2><div class="notice good">✓ Die fachlich unklare Änderung wurde geklärt. Umfang und erforderliche Umsetzung sind abgestimmt; die Bereitstellung ist bis Freitag vorgesehen.<br>✓ Die Installation von Release 2.0 auf der Zentralen Testumgebung ist für Freitag eingeplant und wird anschließend bestätigt.<br>✓ Die Verfügbarkeit des benötigten Testers wurde bestätigt.</div><div class="notice"><b>Weiterhin offen, aber für die jeweils betroffenen Tests eingeplant:</b><br>• Testdaten für einen wichtigen Geschäftsfall werden noch bereitgestellt. Nur ein Teil der Tests ist betroffen.<br>• Eine benötigte Schnittstelle steht noch nicht zur Verfügung. Die wenigen betroffenen Testfälle sind identifiziert; der Status wird weiterverfolgt und andere durchführbare Tests können zunächst stattfinden.</div><div class="story"><b>Wie ist der aktuelle Stand zu bewerten?</b><br><br>Die Testdurchführung beginnt erst in der kommenden Woche. Wichtige Voraussetzungen werden bis dahin geklärt. Weitere offene Punkte sind bekannt, betreffen nur Teile der Tests und werden weiterverfolgt.</div><div class="options" id="assessmentOptions"><button id="ass0" onclick="s2assessment(false,0)">Die Testdurchführung kann sofort beginnen.</button><button id="ass1" onclick="s2assessment(true,1)">Die Vorbereitung kann fortgesetzt werden. Die offenen Punkte müssen bis zum Testbeginn beziehungsweise für die jeweils betroffenen Tests weiterverfolgt werden.</button><button id="ass2" onclick="s2assessment(false,2)">Alle offenen Punkte können geschlossen werden, weil Maßnahmen geplant sind.</button><button id="ass3" onclick="s2assessment(false,3)">Die Testdurchführung muss bereits jetzt vollständig abgesagt werden.</button></div><div id="fb"></div>`) }
-function s2assessment(ok,id){document.querySelectorAll('#assessmentOptions button').forEach(b=>b.classList.remove('selected'));document.querySelector('#ass'+id).classList.add('selected');document.querySelector('#fb').innerHTML=ok?msg('Korrekt. Die wichtigen Voraussetzungen werden bis zum Testbeginn geklärt. Weitere bekannte Einschränkungen werden für die jeweils betroffenen Tests weiterverfolgt.',true)+`<button class="primary" onclick="s2end()">Vorbereitung abschließen</button>`:msg('Bitte noch einmal prüfen: Geplante Maßnahmen und bekannte Einschränkungen sind noch nicht dasselbe wie bereits vollständig erfüllte Voraussetzungen.')}
-function s2end(){panel(`<div class="eyebrow">Station 2 · Abschluss</div><h2>TESTVORBEREITUNG SOWEIT ABGESCHLOSSEN</h2><div class="notice good">✓ Offene Voraussetzungen identifiziert<br>✓ Passende Maßnahmen festgelegt<br>✓ Wichtige Voraussetzungen für Woche 2 werden geklärt<br>✓ Weitere offene Punkte sind bekannt und werden für die betroffenen Tests weiterverfolgt</div><button class="primary" onclick="s2transition()">Weiter</button>`) }
+function s2update(){
+ const testdata=selectedActionIndices.includes(1)?'<br>• Die fehlenden Testdaten wurden angefordert. Die betroffenen Tests sind identifiziert und der Status wird weiterverfolgt.':'';
+ const iface=selectedActionIndices.includes(5)?'<br>• Die betroffenen Testfälle zur noch nicht verfügbaren Schnittstelle sind identifiziert. Andere durchführbare Tests können zunächst stattfinden.':'';
+ const optionalBlock=(testdata||iface)?`<div class="notice"><b>Zusätzlich erkannte offene Punkte:</b>${testdata}${iface}</div>`:'';
+ panel(`<div class="eyebrow">Station 2 · Dienstag 16:36 Uhr</div><h2>Update zur Testvorbereitung</h2><div class="notice good">✓ Die fachlich unklare Änderung wurde geklärt. Umfang und erforderliche Umsetzung sind abgestimmt; die Bereitstellung ist bis Freitag vorgesehen.<br>✓ Die Installation von Release 2.0 auf der Zentralen Testumgebung ist für Freitag eingeplant und wird anschließend bestätigt.<br>✓ Die Verfügbarkeit des benötigten Testers wurde bestätigt.</div>${optionalBlock}<div class="story"><b>Wie ist der aktuelle Stand zu bewerten?</b><br><br>Die Testdurchführung beginnt erst in der kommenden Woche. Die für den geplanten Start wichtigen Voraussetzungen werden bis dahin geklärt. Erkannte weitere Einschränkungen werden für die jeweils betroffenen Tests weiterverfolgt.</div><div class="options" id="assessmentOptions"><button id="ass0" onclick="s2assessment(false,0)">Die Testdurchführung kann sofort beginnen.</button><button id="ass1" onclick="s2assessment(true,1)">Die Vorbereitung kann fortgesetzt werden. Die offenen Punkte müssen bis zum Testbeginn beziehungsweise für die jeweils betroffenen Tests weiterverfolgt werden.</button><button id="ass2" onclick="s2assessment(false,2)">Alle offenen Punkte können geschlossen werden, weil Maßnahmen geplant sind.</button><button id="ass3" onclick="s2assessment(false,3)">Die Testdurchführung muss bereits jetzt vollständig abgesagt werden.</button></div><div id="fb"></div>`)
+}
+function s2assessment(ok,id){document.querySelectorAll('#assessmentOptions button').forEach(b=>b.classList.remove('selected'));document.querySelector('#ass'+id).classList.add('selected');document.querySelector('#fb').innerHTML=ok?msg('Korrekt. Die wichtigen Voraussetzungen werden bis zum Testbeginn geklärt. Erkannte weitere Einschränkungen werden für die jeweils betroffenen Tests weiterverfolgt.',true)+`<button class="primary" onclick="s2end()">Vorbereitung abschließen</button>`:msg('Bitte noch einmal prüfen: Geplante Maßnahmen und bekannte Einschränkungen sind noch nicht dasselbe wie bereits vollständig erfüllte Voraussetzungen.')}
+function s2end(){const extras=selectedActionIndices.length-3;panel(`<div class="eyebrow">Station 2 · Abschluss</div><h2>TESTVORBEREITUNG SOWEIT ABGESCHLOSSEN</h2><div class="notice good">✓ Drei wichtige Voraussetzungen identifiziert<br>✓ Passende Maßnahmen festgelegt<br>✓ Wichtige Voraussetzungen für Woche 2 werden geklärt${extras?`<br>✓ ${extras===2?'Zwei weitere offene Punkte wurden':'Ein weiterer offener Punkt wurde'} erkannt und für die betroffenen Tests berücksichtigt`:''}</div><button class="primary" onclick="s2transition()">Weiter</button>`) }
 function s2transition(){panel(`<div class="eyebrow">Woche 1 – Dienstag 18:27 Uhr</div><h2>Geschafft – die Testvorbereitungen sind erfolgt!</h2><div class="story">Die Vorbereitungen für die Woche 2 sind eingeleitet.<br><br>Währenddessen beginnt die konkrete Analyse der Anforderungen für Release 2.0. Als Nächstes wird Unterstützung bei der Testfallanalyse benötigt.<br><br><b>Kann es weitergehen?</b></div><button class="primary" onclick="s3intro()">Mittwoch öffnen</button>`) }
 function s3intro(){setP(3,'Woche 1 · Mittwoch');panel(`<div class="eyebrow">Mittwoch · 09:18 Uhr</div><h2>Unterstützung bei der Testfallanalyse</h2><div class="story">Die Tester sind dabei, die Anforderungen zu sichten und zu analysieren und daraus Testinhalte abzuleiten. Testfälle werden im Tool erstellt.<br><br>Ein Kollege benötigt dabei Unterstützung. Hier muss unter die Arme gegriffen werden.</div><button class="primary" onclick="s3()">Unterstützung beginnen</button>`)}
 function s3(){setP(3,'Woche 1 · Mittwoch');panel(`<div class="eyebrow">Station 3 – Testfallanalyse</div><h2>Das neue Überweisungslimit</h2>${meter(0,'TESTFALLANALYSE UND -ERSTELLUNG')}${anf327()}<button class="primary" onclick="s3classes()">Anforderung analysieren</button>`)}
