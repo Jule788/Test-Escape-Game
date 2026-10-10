@@ -1,20 +1,21 @@
-# Test-Rescue-Game – Woche 2 – QS v1.8
+# Test-Rescue-Game – Woche 1 – QS v2.1
 
-Überarbeitete QS-Fassung von Woche 2 auf Basis der bisherigen v1.6.
+QS-Fassung von Woche 1 mit den Anpassungen aus QS_Woche_1_V1.4.
 
-## Anpassungen
-- Überschriften und Stations-/Aktivitätsbezeichnungen an die Darstellung von Woche 1 angeglichen.
-- Tag und Uhrzeit bleiben über die globale Zeitanzeige auf den Aufgabenbildschirmen sichtbar.
-- Station 4 wird als Fehleranalyse, Station 5 als Fehlermeldung, Station 6 als Teststeuerung und Station 7 als Testabschluss geführt.
-- Unterseiten besitzen konsistente Aktivitätsbezeichnungen (z. B. Weitere Testfälle, Reproduktion und Analyse, Risikobewertung, Replanung, Teststatus, Testziele und Freigabeempfehlung).
-- SSL-Zertifikat-Szene als Planabweichung vor Station 4 sprachlich vereinheitlicht.
-- Inhaltliche Aufgabenlogik der bisherigen Woche-2-QS wurde nicht grundlegend verändert.
+## Änderung Station 2
+- Einstieg fragt nach allen offenen bzw. zu klärenden Voraussetzungen – unabhängig davon, ob die Klärung noch in Woche 1 oder für betroffene Tests in Woche 2 erfolgen kann.
+- Alle fünf offenen Punkte müssen in der Statusprüfung erkannt werden.
+- Maßnahmen werden nicht mehr über Dropdown-Menüs, sondern über vollständig lesbare Auswahlkacheln gewählt.
+- Jeder Handlungsbedarf besitzt eigene, zum Sachverhalt passende Maßnahmenoptionen.
+- Auswahlkacheln bleiben sichtbar markiert.
+- Update und Abschluss wurden an die neue Logik angepasst.
 
-Diese Fassung ist für die nächste inhaltliche QS von Woche 2 vorgesehen.
+Station 1 und Station 3 bleiben inhaltlich unverändert.
 
 
-## QS V1.8
-- Mehrfachauswahl in Station 4 und 5 repariert (Auswahlkacheln funktionieren und bleiben hervorgehoben).
-- Kopfzeile analog Woche 1 um Woche/Tag ergänzt.
-- Doppelte „Woche 2“-Kontextzeilen in der Planabweichung entfernt.
-- Neustart der eigenständigen Woche-2-QS korrigiert.
+## Änderung V2.1
+Station 2: drei Pflichtpunkte, zwei optionale Zusatzpunkte mit Credits, dynamische Maßnahmenblöcke und drei plausiblere Antwortoptionen je ausgewähltem Punkt.
+
+
+## QS v2.2
+- Escape-Code 8306 nach Station 3 ergänzt; Hinweis zum Notieren für das spätere Abschlussrätsel.
