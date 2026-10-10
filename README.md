@@ -1,17 +1,13 @@
-# Test-Rescue-Game – Woche 1 – QS v2.1
+# Test-Rescue-Game – Woche 2 – QS v1.7
 
-QS-Fassung von Woche 1 mit den Anpassungen aus QS_Woche_1_V1.4.
+Überarbeitete QS-Fassung von Woche 2 auf Basis der bisherigen v1.6.
 
-## Änderung Station 2
-- Einstieg fragt nach allen offenen bzw. zu klärenden Voraussetzungen – unabhängig davon, ob die Klärung noch in Woche 1 oder für betroffene Tests in Woche 2 erfolgen kann.
-- Alle fünf offenen Punkte müssen in der Statusprüfung erkannt werden.
-- Maßnahmen werden nicht mehr über Dropdown-Menüs, sondern über vollständig lesbare Auswahlkacheln gewählt.
-- Jeder Handlungsbedarf besitzt eigene, zum Sachverhalt passende Maßnahmenoptionen.
-- Auswahlkacheln bleiben sichtbar markiert.
-- Update und Abschluss wurden an die neue Logik angepasst.
+## Anpassungen
+- Überschriften und Stations-/Aktivitätsbezeichnungen an die Darstellung von Woche 1 angeglichen.
+- Tag und Uhrzeit bleiben über die globale Zeitanzeige auf den Aufgabenbildschirmen sichtbar.
+- Station 4 wird als Fehleranalyse, Station 5 als Fehlermeldung, Station 6 als Teststeuerung und Station 7 als Testabschluss geführt.
+- Unterseiten besitzen konsistente Aktivitätsbezeichnungen (z. B. Weitere Testfälle, Reproduktion und Analyse, Risikobewertung, Replanung, Teststatus, Testziele und Freigabeempfehlung).
+- SSL-Zertifikat-Szene als Planabweichung vor Station 4 sprachlich vereinheitlicht.
+- Inhaltliche Aufgabenlogik der bisherigen Woche-2-QS wurde nicht grundlegend verändert.
 
-Station 1 und Station 3 bleiben inhaltlich unverändert.
-
-
-## Änderung V2.1
-Station 2: drei Pflichtpunkte, zwei optionale Zusatzpunkte mit Credits, dynamische Maßnahmenblöcke und drei plausiblere Antwortoptionen je ausgewähltem Punkt.
+Diese Fassung ist für die nächste inhaltliche QS von Woche 2 vorgesehen.
