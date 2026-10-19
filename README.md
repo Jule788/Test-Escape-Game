@@ -1,13 +1,10 @@
-# Test-Rescue-Game – Woche 2 – QS V2.1
+# Test-Rescue-Game – Gesamt-QS v1.0
 
-QS-Fassung auf Basis V2.0 und QS_Woche_2_V1.3.
+Diese Prüfversion führt Woche 1 (Basis v2.2) und Woche 2 (Basis v2.1) zusammen.
 
-Änderungen in V2.1:
-- Neuer Text im letzten Rätsel: Code ergibt gleichzeitig ein Wort; Bezug auf die letzten beiden Wochen.
-- Schlusscode wird direkt über die Tasten des dargestellten Mobiltelefons eingegeben; separates Eingabefeld entfällt.
-- Mobiltelefon optisch deutlicher als klassisches Handy gestaltet (Display 16:00, Hörmuschel, Hörertasten, Navigation, Zahlentasten mit Buchstaben).
-- Löschen und Prüfen sind direkt auf der Handytastatur möglich.
-- Dreistufiger Tipp-Button bleibt erhalten.
-- Laufender Gesamt-Creditstand in der Kopfzeile ist verborgen; einzelne Credit-Gewinne bleiben sichtbar.
-- Tatsächlich gesammelte Credits werden erst bei der Release-Entscheidung angezeigt.
-- Richtiger Code 8378 führt weiterhin direkt zur Release-Entscheidung.
+## QS-Navigation
+Am unteren Fensterrand stehen `Zurück` und `Weiter` zur Verfügung. Damit kann jede Ansicht unabhängig von beantworteten Fragen, Auswahlen oder Codes aufgerufen werden. `Zu Woche 1/2` springt direkt zwischen den Wochen.
+
+Die normalen Schaltflächen und Aufgaben bleiben zusätzlich bedienbar, damit die reguläre Spiellogik weiterhin geprüft werden kann. Der laufende Gesamt-Creditstand ist – entsprechend der aktuellen Festlegung – auch in Woche 1 verborgen; einzelne Credit-Belohnungen bleiben sichtbar.
+
+Diese Navigation ist nur für die QS gedacht und soll in der späteren Spielversion wieder entfernt werden.
